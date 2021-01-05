@@ -1,6 +1,6 @@
 from flask.helpers import send_file
 from flask.wrappers import Response
-from flask import Flask, json, jsonify, request
+from flask import Flask, json, jsonify, request, render_template
 import model
 from keras.models import load_model
 import os
@@ -14,12 +14,7 @@ pretrained_model = None
 
 @app.route("/")
 def index_page():
-    return_data = {
-        "error": "0",
-        "message": "Successful",
-        "hello": "world"
-    }
-    return jsonify(return_data)
+    return render_template("index.html")
 
 @app.route("/get_labels", methods=['POST'])
 def model_deploy():
