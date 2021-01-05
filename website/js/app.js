@@ -24,6 +24,20 @@ function LoadImagesOnPage(){
     });
 }
 
+function LoadImagesFromWeb(){
+    $.ajax({
+        url : folder,
+        success: function (data) {
+            $(data).find("a").attr("href", function (i, val) {
+                if( val.match(/\.(jpe?g|png|gif|jfif)$/) ) { 
+                    $("#photos").append( "<img class='photo' src='"+ folder + val +"'>" );
+                } 
+            });
+        }
+    });
+}
+
+
 function getExif() {
 
     var images = $("#photos").children()
@@ -73,7 +87,8 @@ function getMatchingExif() {
 }
 
 $( document ).ready(function() {
-    LoadImagesOnPage(); 
+    // LoadImagesOnPage(); 
+    LoadImagesFromWeb();
 
     $("#txtTagInput").on("input",function(){getMatchingExif()})
     $("#searchbtn").on("click",function(){getMatchingExif()})

@@ -9,33 +9,23 @@ Http.onreadystatechange=function(){
     }
 }
 
-var folder = "./static/images/";
 
 function LoadImagesOnPage(){
+
     $.ajax({
-        url : folder,
+        url : "/images",
         success: function (data) {
-            $(data).find("a").attr("href", function (i, val) {
-                if( val.match(/\.(jpe?g|png|gif|jfif)$/) ) { 
-                    $("#photos").append( "<img class='photo' src='"+ folder + val +"'>" );
+            for (var i = 0; i<data.length; i++){
+                if( data[i].match(/\.(jpe?g|png|gif|jfif)$/) ) { 
+                    $("#photos").append( "<img class='photo' src='static/images/"+data[i]+"'>" );
                 } 
-            });
+            }
+ 
         }
     });
+
 }
 
-function getExif() {
-
-    var images = $("#photos").children()
-    for (var i = 0; i < images.length; i++) {
-        var img1 = $("#photos").children()[i];
-        EXIF.getData(img1, function() {
-            var tags = EXIF.getTag(this,"ImageDescription");
-            console.log(tags)
-        });
-    }
-    
-}
 
 function getMatchingExif() {
 
@@ -69,15 +59,13 @@ function getMatchingExif() {
         $(".photo").show()
     }
 
-    
 }
 
 $( document ).ready(function() {
     LoadImagesOnPage(); 
-
+    
     $("#txtTagInput").on("input",function(){getMatchingExif()})
     $("#searchbtn").on("click",function(){getMatchingExif()})
-
 
 });
 

@@ -1,6 +1,6 @@
 from flask.helpers import send_file
 from flask.wrappers import Response
-from flask import Flask, json, jsonify, request, render_template
+from flask import Flask, json, jsonify, request, render_template, send_from_directory
 import model
 from keras.models import load_model
 import os
@@ -81,6 +81,11 @@ def model_deploy():
         new_image_file.write(my_image.get_file())
 
     return jsonify(return_data)
+
+@app.route("/images")
+def getImageNames():
+    files = os.listdir("./static/images")
+    return jsonify(files)
 
 if __name__ == "__main__":
     # load yolov3 models
