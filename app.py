@@ -23,9 +23,9 @@ def model_deploy():
         return 'there is no file1 in form!'
     file1 = request.files['image_in']
     # path = os.path.join(app.config['UPLOAD_FOLDER'], file1.filename)
-    path = "./website/assets/images/"+file1.filename
+    path = "./static/images/"+file1.filename
     file1.save(path)
-
+    print("file uploaded")
     # define the expected input shape for the model
     input_w, input_h = 416, 416
     # define our new photo
