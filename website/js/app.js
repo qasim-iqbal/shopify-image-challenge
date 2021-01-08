@@ -91,7 +91,9 @@ $( document ).ready(function() {
     LoadImagesFromWeb();
 
     $("#txtTagInput").on("input",function(){getMatchingExif()})
-    $("#searchbtn").on("click",function(){getMatchingExif()})
+    $("#searchbtn").on("click",function(){
+        $("#loader").hide();
+    })
 
 
 });
