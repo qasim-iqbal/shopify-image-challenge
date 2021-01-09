@@ -6,7 +6,7 @@ The website is a single page application, with a search bar to find specific ima
 
 
 # Installation:
-  The repository includes a docker file, just run it on your personal computer, Only the pretrained file is missing, which can be download from this link https://drive.google.com/file/d/10AaNPSRB9LVV5gNfevcEPUuwg4xkhK3O/view?usp=sharing, add this file to root folder next to app.py file. 
+  The repository includes a docker file, just run it on your personal computer, Only the pretrained file is missing, which can be download from this [link](https://drive.google.com/file/d/10AaNPSRB9LVV5gNfevcEPUuwg4xkhK3O/view?usp=sharing), add this file to root folder next to app.py file. 
 
   Once the file is placed in directory, just type commands below
   - docker-compose build --no-cache
@@ -15,7 +15,8 @@ The website is a single page application, with a search bar to find specific ima
   
  It should start a server instance on port 5000, just go to your borwser window and type
   - http://localhost:5000
-it should load up a website with some images already in it, if not then just take some image from your local directory and drag and drop them on the search bar. Once image is dropped it will start uploading process and return images on server which match the image metadata.
+  
+ It should load up a website with some images already in it, if not then just take some image from your local directory and drag and drop them on the search bar. Once image is dropped it will start uploading process and return images on server which match the image metadata.
   
 
 
