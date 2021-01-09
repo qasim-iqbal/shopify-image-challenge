@@ -47,7 +47,6 @@ def model_deploy():
         # decode the output of the network
         boxes += model.decode_netout(yhat[i][0], anchors[i], class_threshold, input_h, input_w)
     # correct the sizes of the bounding boxes for the shape of the image
-    # correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w)
     # suppress non-maximal boxes
     model.do_nms(boxes, 0.5)
     # define the labels
@@ -69,13 +68,13 @@ def model_deploy():
         return_data.append(v_labels[i])
 
     img_files = os.listdir("./static/images")
-    if len(img_files) <= 50: # max limit of images on page, no need of more
-        # TODO: resize all images to same aspect ratio before saving,
+    if len(img_files) <= 50: # max limit of images on page
+        # resize all images to same aspect ratio before saving,
         img = Image.open(path)
         img = img.resize((400,400),Image.ANTIALIAS)
         img.save(path,"JPEG",quality=90)
         
-        # TODO: add tags to image description, once the Image processing is done
+        # add tags to image description, once the Image processing is done
         with open(path, 'rb') as image_file:
             my_image = exif.Image(image_file)
 
