@@ -6,9 +6,9 @@ The website is a single page application, with a search bar to find specific ima
 
 
 # Installation:
-  The repository includes a docker file, just run it on your personal computer, Only the pretrained file is missing, which can be download from this [link](https://drive.google.com/file/d/10AaNPSRB9LVV5gNfevcEPUuwg4xkhK3O/view?usp=sharing), add this file to root folder next to app.py file. 
+  The repository includes a docker file, just run it on your personal computer, Only the pretrained file is missing, which can be downloaded from this [link](https://drive.google.com/file/d/10AaNPSRB9LVV5gNfevcEPUuwg4xkhK3O/view?usp=sharing), add this file to root folder next to app.py file. 
 
-  Once the file is placed in directory, just type commands below
+  Once the file is placed in directory make sure you have docker for desktop installed on your computer, If you have it then open up terminal or command prompt type commands below:
   - docker-compose build --no-cache
   - docker-compose up -d
   - docker-compose up
