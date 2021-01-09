@@ -2,9 +2,8 @@ from numpy import expand_dims
 import numpy as np
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
-from matplotlib import pyplot
 from matplotlib.patches import Rectangle
-# https://machinelearningmastery.com/how-to-perform-object-detection-with-yolov3-in-keras/ (source)
+# https://github.com/experiencor/keras-yolo3/blob/master/yolo3_one_file_to_detect_them_all.py
 class BoundBox:
 	def __init__(self, xmin, ymin, xmax, ymax, objness = None, classes = None):
 		self.xmin = xmin

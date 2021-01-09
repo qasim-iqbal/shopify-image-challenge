@@ -1,6 +1,4 @@
-matplotlib
 scipy
 Flask
 keras
-matplotlib
 exif

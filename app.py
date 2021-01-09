@@ -1,10 +1,7 @@
-from flask.helpers import send_file
-from flask.wrappers import Response
-from flask import Flask, json, jsonify, request, render_template, send_from_directory
+from flask import Flask, json, jsonify, request, render_template
 import model
 from keras.models import load_model
 import os
-import traceback
 from PIL import Image
 import exif 
 
@@ -19,8 +16,13 @@ def index_page():
 @app.route("/get_labels", methods=['POST'])
 def model_deploy():
 
+    # check if key is correct
     if 'image_in' not in request.files:
-        return 'there is no file1 in form!'
+        return 'Error! incorrect form data key.'
+
+    # check images file size
+    files = os.listdir("./static/images")
+
     file1 = request.files['image_in']
     # path = os.path.join(app.config['UPLOAD_FOLDER'], file1.filename)
     path = "./static/images/"+file1.filename
@@ -66,19 +68,23 @@ def model_deploy():
     for i in range(len(v_boxes)):
         return_data.append(v_labels[i])
 
-    # TODO: resize all images to same aspect ratio before saving,
-    img = Image.open(path)
-    img = img.resize((400,400),Image.ANTIALIAS)
-    img.save(path,"JPEG",quality=90)
-    
-    # TODO: add tags to image description, once the Image processing is done
-    with open(path, 'rb') as image_file:
-        my_image = exif.Image(image_file)
+    img_files = os.listdir("./static/images")
+    if len(img_files) <= 50: # max limit of images on page, no need of more
+        # TODO: resize all images to same aspect ratio before saving,
+        img = Image.open(path)
+        img = img.resize((400,400),Image.ANTIALIAS)
+        img.save(path,"JPEG",quality=90)
+        
+        # TODO: add tags to image description, once the Image processing is done
+        with open(path, 'rb') as image_file:
+            my_image = exif.Image(image_file)
 
-    my_image.image_description = str(return_data)
+        my_image.image_description = str(return_data)
 
-    with open(path, 'wb') as new_image_file:
-        new_image_file.write(my_image.get_file())
+        with open(path, 'wb') as new_image_file:
+            new_image_file.write(my_image.get_file())
+    else:
+        os.remove(path)
 
     return jsonify(return_data)
 
