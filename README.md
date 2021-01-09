@@ -15,7 +15,7 @@ The website is a single page application, with a search bar to find specific ima
   
  It should start a server instance on port 5000, just go to your borwser window and type
   - http://localhost:5000
- it should load up a website with some images already in it, if not then just take some image from your local directory and drag and drop them on the search bar. Once image is dropped it will start uploading process and return images on server which match the image metadata.
+it should load up a website with some images already in it, if not then just take some image from your local directory and drag and drop them on the search bar. Once image is dropped it will start uploading process and return images on server which match the image metadata.
   
 
 
