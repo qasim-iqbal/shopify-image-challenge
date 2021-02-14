@@ -2,7 +2,7 @@
 const MIN_TAG_LENGTH = 2 
 
 // When browswer loads, display images from server
-function LoadImagesOnPage(){
+function loadImagesOnPage(){
 
     // load images form the server, and display them on browser
     $.ajax({
@@ -132,8 +132,8 @@ $( document ).ready(function() {
     $("#loader").hide()
 
     // add images to page
-    LoadImagesOnPage(); 
-    
+    loadImagesOnPage(); 
+
     $('#logo').click(function() {
         location.reload();
     });

@@ -2,7 +2,7 @@ version: "3.7"
 
 services: 
   ml-app:
-    image: researchregistery.azurecr.io/gallerai:latest
+    image: python:3.6-stretch
     build: .
     ports:
       - 5000:5000

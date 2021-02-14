@@ -5,34 +5,40 @@ import os
 from PIL import Image
 import exif 
 
+# Variables/Constants declaration
 app = Flask(__name__)
 pretrained_model = None
-# ML model path
+ROOT_PATH = "./static/images/"
+MAX_IMAGES_ON_SERVER = 50
 
+
+# API routes
 @app.route("/")
 def index_page():
     return render_template("index.html")
 
 @app.route("/get_labels", methods=['POST'])
-def model_deploy():
+def model_prediction():
 
     # check if key is correct
     if 'image_in' not in request.files:
-        return 'Error! incorrect form data key.'
+        return 'Error! incorrect form-data key.'
 
     # check images file size
-    files = os.listdir("./static/images")
+    files = os.listdir(ROOT_PATH)
 
     file1 = request.files['image_in']
-    # path = os.path.join(app.config['UPLOAD_FOLDER'], file1.filename)
-    path = "./static/images/"+file1.filename
-    file1.save(path)
+
+    file_path = ROOT_PATH+file1.filename
+    file1.save(file_path)
+
     print("file uploaded")
     # define the expected input shape for the model
     input_w, input_h = 416, 416
     # define our new photo
+
     # load and prepare image
-    image, image_w, image_h = model.load_image_pixels(path, (input_w, input_h))
+    image, image_w, image_h = model.load_image_pixels(file_path, (input_w, input_h))
     # make prediction
 
     yhat = pretrained_model.predict(image)
@@ -49,6 +55,7 @@ def model_deploy():
     # correct the sizes of the bounding boxes for the shape of the image
     # suppress non-maximal boxes
     model.do_nms(boxes, 0.5)
+
     # define the labels
     labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck",
         "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench",
@@ -67,33 +74,32 @@ def model_deploy():
     for i in range(len(v_boxes)):
         return_data.append(v_labels[i])
 
-    img_files = os.listdir("./static/images")
-    if len(img_files) <= 50: # max limit of images on page
+    img_files = os.listdir(file_path)
+    if len(img_files) <= MAX_IMAGES_ON_SERVER: # max limit of images on page
         # resize all images to same aspect ratio before saving,
-        img = Image.open(path)
+        img = Image.open(file_path)
         img = img.resize((400,400),Image.ANTIALIAS)
-        img.save(path,"JPEG",quality=90)
+        img.save(file_path,"JPEG",quality=90)
         
         # add tags to image description, once the Image processing is done
-        with open(path, 'rb') as image_file:
+        with open(file_path, 'rb') as image_file:
             my_image = exif.Image(image_file)
 
         my_image.image_description = str(return_data)
 
-        with open(path, 'wb') as new_image_file:
+        with open(file_path, 'wb') as new_image_file:
             new_image_file.write(my_image.get_file())
     else:
-        os.remove(path)
+        os.remove(file_path)
 
     return jsonify(return_data)
 
 @app.route("/images")
-def getImageNames():
-    files = os.listdir("./static/images")
+def get_Images_Names():
+    files = os.listdir(ROOT_PATH)
     return jsonify(files)
 
 if __name__ == "__main__":
     # load yolov3 models
     pretrained_model = load_model('model.h5')
-
     app.run(host='0.0.0.0')
