@@ -1,5 +1,6 @@
 // CONSTANTS
 const MIN_TAG_LENGTH = 2 
+const MAX_CHAR_LIMIT = 100
 
 // When browswer loads, display images from server
 function loadImagesOnPage(){
@@ -13,7 +14,6 @@ function loadImagesOnPage(){
                     $(".photos").append( "<img id='img_"+i+"' ondragstart='onDragStart(event)'  class='photo' draggable='True' src='static/images/"+data[i]+"'>" )
                 } 
             }
- 
         }
     })
 
@@ -91,8 +91,11 @@ function uploadData(file){
         processData: false,
         dataType: 'json',
         success: function(response){
-            console.log(response)
-            getMatchingExif(response)
+            if (response.code[0] == "E"){
+                alert("Error! "+ response.message)
+            }else{
+                getMatchingExif(response.message)
+            }
             $("#loader").hide()
         }
     });
@@ -144,10 +147,13 @@ $( document ).ready(function() {
           $('#searchbtn').click();
           return false;  
         }
+        if ($('#txtTagInput').val().length > MAX_CHAR_LIMIT){
+            alert("Error! maxium character limit is '"+ MAX_CHAR_LIMIT +"'.")
+        }
       });
 
     // search for images when search button is clicked
-    $("#searchbtn").on("click",function(e){getMatchingExif($("#txtTagInput").val())})
+    $("#searchbtn").on("click",function(e){getMatchingExif($("#txtTagInput").val().toLowerCase())})
 
     // add dragover and dragenter events later?
     $("#upload_data").bind("drop", function(e) {
@@ -172,4 +178,3 @@ $( document ).ready(function() {
     });
 
 });
-

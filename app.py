@@ -1,4 +1,6 @@
 from flask import Flask, json, jsonify, request, render_template
+from flask.wrappers import Response
+from numpy.lib.type_check import imag
 import model
 from keras.models import load_model
 import os
@@ -8,7 +10,7 @@ import exif
 # Variables/Constants declaration
 app = Flask(__name__)
 pretrained_model = None
-ROOT_PATH = "./static/images/"
+ROOT_PATH = "./static/images"
 MAX_IMAGES_ON_SERVER = 50
 
 
@@ -22,15 +24,27 @@ def model_prediction():
 
     # check if key is correct
     if 'image_in' not in request.files:
-        return 'Error! incorrect form-data key.'
+        return json.dumps({
+            "code" : "E001",
+            "message": "Incorrect form-data key"
+        })
 
-    # check images file size
+    # save the file
     files = os.listdir(ROOT_PATH)
-
     file1 = request.files['image_in']
 
-    file_path = ROOT_PATH+file1.filename
+    file_path = ROOT_PATH+"/"+file1.filename
     file1.save(file_path)
+
+    try:
+        im = Image.open(file_path)
+        im.verify()
+    except:
+        os.remove(file_path) # remove the file
+        return json.dumps({
+            "code" : "E002",
+            "message": "Incorrect file type"
+        })
 
     print("file uploaded")
     # define the expected input shape for the model
@@ -74,7 +88,15 @@ def model_prediction():
     for i in range(len(v_boxes)):
         return_data.append(v_labels[i])
 
-    img_files = os.listdir(file_path)
+    # image could not be classified into any category
+    if len(return_data) == 0:
+        os.remove(file_path)
+        return json.dumps({
+            "code" : "E003",
+            "message" : "Image could not be classified"
+        })
+
+    img_files = os.listdir(ROOT_PATH)
     if len(img_files) <= MAX_IMAGES_ON_SERVER: # max limit of images on page
         # resize all images to same aspect ratio before saving,
         img = Image.open(file_path)
@@ -92,7 +114,10 @@ def model_prediction():
     else:
         os.remove(file_path)
 
-    return jsonify(return_data)
+    return json.dumps({
+        "code" : "S000",
+        "message": return_data
+    })
 
 @app.route("/images")
 def get_Images_Names():

@@ -9,4 +9,3 @@ services:
     working_dir: /ml-app
     volumes:
       - "./:/ml-app"
-  
