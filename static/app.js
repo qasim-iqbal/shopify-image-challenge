@@ -30,6 +30,7 @@ function loadImagesOnPage(){
 
 }
 
+
 // update images on page, with specific tags
 function getMatchingExif(tags) {
     
@@ -59,11 +60,11 @@ function getMatchingExif(tags) {
 
         // show only then ones that match the tag
         var images = $(".photo")
-        console.log(images)
+
         for (let i = 0; i < images.length; i++) {
-            let img1 = $('#'+images[i].id)[0]
+            let img1 = images[i]
             console.log(img1)
-            // console.log("img searched : ", img1.id)
+            console.log("img searched : ", img1.id)
             EXIF.getData(img1, function() {
                 let img_tags = EXIF.getTag(this,"ImageDescription")
 
@@ -79,11 +80,13 @@ function getMatchingExif(tags) {
                     }
                 }
             });
+
         }
 
     }else{
         $(".photo").show()
     }
+
 
 }
 
