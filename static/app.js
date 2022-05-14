@@ -11,7 +11,18 @@ function loadImagesOnPage(){
         success: function (data) {
             for (var i = 0; i<data.length; i++){
                 if( data[i].match(/\.(jpe?g|png|gif|jfif)$/) ) { 
-                    $(".photos").append( "<img id='img_"+i+"' ondragstart='onDragStart(event)'  class='photo' draggable='True' src='static/images/"+data[i]+"'>" )
+                    let div = $('<div></div>').addClass('col-sm-6 col-md-4 col-lg-3 item');
+
+                    let photo = $(`<img 
+                                        id='img_${i}' 
+                                        ondragstart='onDragStart(event)'   
+                                        class='photo img-fluid w-100 shadow-1-strong rounded mb-4' 
+                                        draggable='True' 
+                                        on
+                                        src='static/images/${data[i]}'>`);
+
+
+                    $('.photos').append(div.append(photo))
                 } 
             }
         }
@@ -47,10 +58,12 @@ function getMatchingExif(tags) {
         $(".photo").hide()
 
         // show only then ones that match the tag
-        var images = $(".photos").children()
+        var images = $(".photo")
+        console.log(images)
         for (let i = 0; i < images.length; i++) {
-            let img1 = $(".photos").children()[i]
-            console.log("img searched : ", img1.id)
+            let img1 = $('#'+images[i].id)[0]
+            console.log(img1)
+            // console.log("img searched : ", img1.id)
             EXIF.getData(img1, function() {
                 let img_tags = EXIF.getTag(this,"ImageDescription")
 
@@ -71,7 +84,6 @@ function getMatchingExif(tags) {
     }else{
         $(".photo").show()
     }
-
 
 }
 

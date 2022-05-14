@@ -127,4 +127,7 @@ def get_Images_Names():
 if __name__ == "__main__":
     # load yolov3 models
     pretrained_model = load_model('model.h5')
+    
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(host='0.0.0.0')
