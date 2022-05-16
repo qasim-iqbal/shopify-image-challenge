@@ -1,3 +1,4 @@
-*.h5
 __pycache__
 website/
+*.h5
+# *.ipynb
