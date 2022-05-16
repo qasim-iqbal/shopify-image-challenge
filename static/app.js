@@ -11,13 +11,25 @@ function loadImagesOnPage(){
         success: function (data) {
             for (var i = 0; i<data.length; i++){
                 if( data[i].match(/\.(jpe?g|png|gif|jfif)$/) ) { 
-                    $(".photos").append( "<img id='img_"+i+"' ondragstart='onDragStart(event)'  class='photo' draggable='True' src='static/images/"+data[i]+"'>" )
+                    let div = $('<div></div>').addClass('col-sm-6 col-md-4 col-lg-3 item');
+
+                    let photo = $(`<img 
+                                        id='img_${i}' 
+                                        ondragstart='onDragStart(event)'   
+                                        class='photo img-fluid w-100 shadow-1-strong rounded mb-4' 
+                                        draggable='True' 
+                                        on
+                                        src='static/images/${data[i]}'>`);
+
+
+                    $('.photos').append(div.append(photo))
                 } 
             }
         }
     })
 
 }
+
 
 // update images on page, with specific tags
 function getMatchingExif(tags) {
@@ -44,13 +56,15 @@ function getMatchingExif(tags) {
     
     if (tags[0].length >= MIN_TAG_LENGTH){
         // hide all images
-        $(".photo").hide()
+        $(".photo").parent().hide()
 
         // show only then ones that match the tag
-        var images = $(".photos").children()
+        var images = $(".photo")
+
         for (let i = 0; i < images.length; i++) {
-            let img1 = $(".photos").children()[i]
-            console.log("img searched : ", img1.id)
+            let img1 = images[i]
+            // console.log(img1)
+            // console.log("img searched : ", img1.id)
             EXIF.getData(img1, function() {
                 let img_tags = EXIF.getTag(this,"ImageDescription")
 
@@ -62,11 +76,16 @@ function getMatchingExif(tags) {
                     // check if any tag matches form image array to passed array
                     if (tags.some(img_tag => img_tags.includes(img_tag))){
                         // TODO: add NLP word vectors to check how similar words are to be shown
-                        $(img1).show()
+                        $(img1).parent().show()
                     }
                 }
             });
+
         }
+        $(".photo").filter(function () {
+            item = $(this).css("display") == "none";
+            $(item).remove()
+        });
 
     }else{
         $(".photo").show()

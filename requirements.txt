@@ -2,5 +2,5 @@ tensorflow==2.4
 matplotlib
 scipy
 Flask
-keras
+keras==2.0.2
 exif

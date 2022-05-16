@@ -22,7 +22,6 @@ The website is a single page application, with a search bar to find specific ima
   - http://localhost:5000
   
  It should load up a website with some images already in it, if not then just take any image from your local directory and drag and drop them on the search bar. Once image is dropped it will start uploading process and return images on server which match the image metadata.
-  
 
 
 # IDEAS for future:
