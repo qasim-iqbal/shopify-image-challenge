@@ -56,15 +56,15 @@ function getMatchingExif(tags) {
     
     if (tags[0].length >= MIN_TAG_LENGTH){
         // hide all images
-        $(".photo").hide()
+        $(".photo").parent().hide()
 
         // show only then ones that match the tag
         var images = $(".photo")
 
         for (let i = 0; i < images.length; i++) {
             let img1 = images[i]
-            console.log(img1)
-            console.log("img searched : ", img1.id)
+            // console.log(img1)
+            // console.log("img searched : ", img1.id)
             EXIF.getData(img1, function() {
                 let img_tags = EXIF.getTag(this,"ImageDescription")
 
@@ -76,12 +76,16 @@ function getMatchingExif(tags) {
                     // check if any tag matches form image array to passed array
                     if (tags.some(img_tag => img_tags.includes(img_tag))){
                         // TODO: add NLP word vectors to check how similar words are to be shown
-                        $(img1).show()
+                        $(img1).parent().show()
                     }
                 }
             });
 
         }
+        $(".photo").filter(function () {
+            item = $(this).css("display") == "none";
+            $(item).remove()
+        });
 
     }else{
         $(".photo").show()
