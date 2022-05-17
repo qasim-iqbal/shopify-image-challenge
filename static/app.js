@@ -1,3 +1,4 @@
+
 // CONSTANTS
 const MIN_TAG_LENGTH = 2 
 const MAX_CHAR_LIMIT = 100
@@ -35,18 +36,12 @@ function loadImagesOnPage(){
 function getMatchingExif(tags) {
     
     // turn parameters to individual tags
-    if (typeof tags == "object"){
-        if (tags.length == 0){ // empty array
+    if (typeof tags == "object" || typeof tags == "string"){
+        if (tags.length == 0 || tags.length <= MIN_TAG_LENGTH){ // empty array
             alert("No match found!")
             return true // if empty then pass
         }else{
             tags = JSON.stringify(tags)
-        }
-    }
-    else if (typeof tags == "string"){
-        if (tags.length  <= MIN_TAG_LENGTH){
-            alert("No match found!")
-            return true // if empty then pass
         }
     }
     tags = tags.split(",")
@@ -67,17 +62,24 @@ function getMatchingExif(tags) {
             // console.log("img searched : ", img1.id)
             EXIF.getData(img1, function() {
                 let img_tags = EXIF.getTag(this,"ImageDescription")
-
                 if (img_tags !== undefined){  // if image has tags
                     img_tags = img_tags.split(",")
                     for(let j=0; j < img_tags.length; j++){
                         img_tags[j] = img_tags[j].replace(/[^a-z]+/gi, "")
                     }
                     // check if any tag matches form image array to passed array
-                    if (tags.some(img_tag => img_tags.includes(img_tag))){
-                        // TODO: add NLP word vectors to check how similar words are to be shown
-                        $(img1).parent().show()
+                    // if (tags.some(img_tag => img_tags.includes(img_tag))){
+                    //     // TODO: add NLP word vectors to check how similar words are to be shown
+                    //     $(img1).parent().show()
+                    // }
+                    for (let t=0; t< tags.length; t++){
+                        for (let im_tag=0; im_tag< img_tags.length; im_tag++){
+                            if (levenshteinDistance(tags[t], img_tags[im_tag]) <=2){
+                                $(img1).parent().show()
+                            }
+                        }
                     }
+                    
                 }
             });
 
@@ -93,6 +95,25 @@ function getMatchingExif(tags) {
 
 
 }
+const levenshteinDistance = (s, t) => {
+    if (!s.length) return t.length;
+    if (!t.length) return s.length;
+    const arr = [];
+    for (let i = 0; i <= t.length; i++) {
+      arr[i] = [i];
+      for (let j = 1; j <= s.length; j++) {
+        arr[i][j] =
+          i === 0
+            ? j
+            : Math.min(
+                arr[i - 1][j] + 1,
+                arr[i][j - 1] + 1,
+                arr[i - 1][j - 1] + (s[j - 1] === t[i - 1] ? 0 : 1)
+              );
+      }
+    }
+    return arr[t.length][s.length];
+  };
 
 // Sending AJAX request and upload file
 function uploadData(file){
@@ -110,6 +131,7 @@ function uploadData(file){
         processData: false,
         dataType: 'json',
         success: function(response){
+            console.log(response)
             if (response.code[0] == "E"){
                 alert("Error! "+ response.message)
             }else{
@@ -152,6 +174,7 @@ function imgUploadSearch(file){
 $( document ).ready(function() {
     // file upload indicator
     $("#loader").hide()
+
 
     // add images to page
     loadImagesOnPage(); 

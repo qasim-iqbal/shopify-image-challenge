@@ -113,3 +113,17 @@ right: 0;
    overflow: scroll;
    /* background-color: #212121; */
  }
+
+ /* pagination */
+
+ #load-imgs {
+   background-color: #a0ffa9;
+   justify-content: center;
+   border-radius: 5px;
+ }
+ #images-load {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+ }

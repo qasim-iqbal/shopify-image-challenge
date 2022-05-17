@@ -9,6 +9,7 @@ import os
 from PIL import Image
 import exif 
 import numpy as np
+import uuid
 
 # Variables/Constants declaration
 app = Flask(__name__)
@@ -36,7 +37,8 @@ def model_prediction():
     files = os.listdir(ROOT_PATH)
     file1 = request.files['image_in']
 
-    file_path = ROOT_PATH+"/"+file1.filename
+    unique_filename = str(uuid.uuid4())
+    file_path = ROOT_PATH+"/"+unique_filename+'.jpg'
     file1.save(file_path)
 
     try:
@@ -68,22 +70,24 @@ def model_prediction():
     pred = model.predict(img.reshape(1,img_w,img_h,1))
 
     # define the probability threshold for detected objects
-    class_threshold = 0.6
+    class_threshold = 0.8
 
     # define the labels
     labels = ['T-Shirt', 'Pants', 'Longsleeve', 'Dress','Shoes']
 
-    # get the details of the detected objects
-    pred_label = labels[np.argmax(pred)]
-    # summarize what we found
-    return_data = [pred_label]
+    return_data = []
+    # get the right class lable for prediction
+    if max(pred[0]) > class_threshold:
+        pred_label = labels[np.argmax(pred)]
+        # summarize what we found
+        return_data = [pred_label]
 
     # image could not be classified into any category
     if len(return_data) == 0:
         os.remove(file_path)
         return json.dumps({
             "code" : "E003",
-            "message" : "Image could not be classified"
+            "message" : "Image could not be classified, Try image of clothing items (pants, shirt,...)"
         })
 
     img_files = os.listdir(ROOT_PATH)
@@ -91,6 +95,7 @@ def model_prediction():
         # resize all images to same aspect ratio before saving,
         img = Image.open(file_path)
         img = img.resize((400,400),Image.ANTIALIAS)
+
         img.save(file_path,"JPEG",quality=90)
         
         # add tags to image description, once the Image processing is done
@@ -117,4 +122,6 @@ def get_Images_Names():
 if __name__ == "__main__":
     # load yolov3 models
     model = load_model('best_model.h5')
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(host='0.0.0.0')
