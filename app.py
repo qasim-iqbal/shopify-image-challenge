@@ -51,25 +51,21 @@ def model_prediction():
 
     print("file uploaded")
     # define the expected input shape for the model
-    input_w, input_h = 416, 416
-    # define our new photo
-
     # load and prepare the image
     img_w, img_h = 64,64
-    def load_image(filename):
-        # load the image as grayscale
-        img = load_img(filename, grayscale=True, target_size=(img_w,img_h))
-        # convert to array
-        img = img_to_array(img)
-        # reshape into a single sample with 1 channel, as we don't need very high quality images for training 
-        img = img.reshape(img_w, img_h, 1)
-        # prepare pixel data
-        img = img.astype('float32')
-        img = img / 255.0
-        return img
+    
+    # load the image as grayscale
+    img = load_img(file_path, grayscale=True, target_size=(img_w,img_h))
+    # convert to array
+    img = img_to_array(img)
+    # reshape into a single sample with 1 channel, as we don't need very high quality images for training 
+    img = img.reshape(img_w, img_h, 1)
+    # prepare pixel data
+    img = img.astype('float32')
+    img = img / 255.0
 
     # make prediction
-    # pred = model.predict(image)
+    pred = model.predict(img.reshape(1,img_w,img_h,1))
 
     # define the probability threshold for detected objects
     class_threshold = 0.6
