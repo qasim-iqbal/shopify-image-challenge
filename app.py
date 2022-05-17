@@ -3,9 +3,12 @@ from flask.wrappers import Response
 from numpy.lib.type_check import imag
 import model
 from keras.models import load_model
+from keras.preprocessing.image import load_img
+from keras.preprocessing.image import img_to_array
 import os
 from PIL import Image
 import exif 
+import numpy as np
 
 # Variables/Constants declaration
 app = Flask(__name__)
@@ -48,45 +51,32 @@ def model_prediction():
 
     print("file uploaded")
     # define the expected input shape for the model
-    input_w, input_h = 416, 416
-    # define our new photo
+    # load and prepare the image
+    img_w, img_h = 64,64
+    
+    # load the image as grayscale
+    img = load_img(file_path, grayscale=True, target_size=(img_w,img_h))
+    # convert to array
+    img = img_to_array(img)
+    # reshape into a single sample with 1 channel, as we don't need very high quality images for training 
+    img = img.reshape(img_w, img_h, 1)
+    # prepare pixel data
+    img = img.astype('float32')
+    img = img / 255.0
 
-    # load and prepare image
-    image, image_w, image_h = model.load_image_pixels(file_path, (input_w, input_h))
     # make prediction
+    pred = model.predict(img.reshape(1,img_w,img_h,1))
 
-    yhat = pretrained_model.predict(image)
-    # summarize the shape of the list of arrays
-    print([a.shape for a in yhat])
-    # define the anchors
-    anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33,23]]
     # define the probability threshold for detected objects
     class_threshold = 0.6
-    boxes = list()
-    for i in range(len(yhat)):
-        # decode the output of the network
-        boxes += model.decode_netout(yhat[i][0], anchors[i], class_threshold, input_h, input_w)
-    # correct the sizes of the bounding boxes for the shape of the image
-    # suppress non-maximal boxes
-    model.do_nms(boxes, 0.5)
 
     # define the labels
-    labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck",
-        "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench",
-        "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe",
-        "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard",
-        "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
-        "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana",
-        "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake",
-        "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor", "laptop", "mouse",
-        "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator",
-        "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
+    labels = ['T-Shirt', 'Pants', 'Longsleeve', 'Dress','Shoes']
+
     # get the details of the detected objects
-    v_boxes, v_labels, v_scores = model.get_boxes(boxes, labels, class_threshold)
+    pred_label = labels[np.argmax(pred)]
     # summarize what we found
-    return_data = []
-    for i in range(len(v_boxes)):
-        return_data.append(v_labels[i])
+    return_data = [pred_label]
 
     # image could not be classified into any category
     if len(return_data) == 0:
@@ -126,8 +116,5 @@ def get_Images_Names():
 
 if __name__ == "__main__":
     # load yolov3 models
-    pretrained_model = load_model('model.h5')
-    
-    app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    model = load_model('best_model.h5')
     app.run(host='0.0.0.0')
