@@ -5,7 +5,7 @@ LABEL Author="Qasim Iqbal"
 RUN apt-get update && \
 	apt-get install -y gcc make apt-transport-https ca-certificates build-essential
 
-WORKDIR /ml-app
+WORKDIR /shop-app
 
 # Installing python dependencies
 COPY requirements.txt .

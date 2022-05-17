@@ -1,11 +1,11 @@
-version: "3.7"
+version: "3.8"
 
 services: 
   ml-app:
-    image: python:3.6-stretch
+    image: python:3.8-stretch
     build: .
     ports:
       - 5000:5000
-    working_dir: /ml-app
+    working_dir: /shop-app
     volumes:
-      - "./:/ml-app"
+      - "./:/shop-app"

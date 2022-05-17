@@ -1,6 +1,6 @@
-tensorflow==2.4
-matplotlib
-scipy
-Flask
-keras==2.0.2
-exif
+tensorflow==2.6.0
+keras==2.6.0
+matplotlib==3.3.4
+scipy==1.5.4
+Flask==2.0.1
+exif==1.2.2
