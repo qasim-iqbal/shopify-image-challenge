@@ -1,7 +1,7 @@
 from flask import Flask, json, jsonify, request, render_template
 from flask.wrappers import Response
 from numpy.lib.type_check import imag
-import model
+# import model
 from keras.models import load_model
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
@@ -14,7 +14,7 @@ import uuid
 # Variables/Constants declaration
 app = Flask(__name__)
 pretrained_model = None
-ROOT_PATH = "./static/images"
+ROOT_PATH = "static/images"
 MAX_IMAGES_ON_SERVER = 50
 
 
