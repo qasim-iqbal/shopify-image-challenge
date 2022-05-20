@@ -15,35 +15,57 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <a class="navbar-brand" id="logo" href="#">GallerAI</a>
+
+          <!-- searc bar area -->
     </div>
   </nav>
 
-
     <!-- searc bar area -->
-    <div id="upload_data" class="wrapper">
-      <div id="loader"></div>
-      <input type="text" id="txtTagInput" maxlength="100"
-      placeholder="Drag and drop image or search by keywords">
+    <div class="container bg-light">
       
-      <div id="searchbtn">
-        <img id='icon' src="./static/icons/baseline_search_black_18dp.png"/>
-        <i class="fas fa-search"></i>
+      <section>
+        <div class="container bg-light">
+          <div class="row justify content-center pt-4 ">
+            <h2>HOW TO CONDUCT IMAGE SEARCH?</h2>
+            <p class="mbr-text align-center border border-info info-header ">GallerAI is an image search gallery. To search for an image,
+              just type comma seperated keywords in search bar (e.g. shoes, shirt) or drag and drop an image either from your computer or one of the image from gallery.
+              Currently, The image gallery can classify upto 5 different items in images including [T-Shirt, Longsleeve, Shoes, Pants, Hat]</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- <div class="row"> -->
+        <div id="upload_data" class="row justify-content-md-center wrapper">
+            <div id="loader"></div>
+  
+            <div class="col-lg-8">
+              <input type="text" id="txtTagInput" maxlength="100"
+              placeholder="Drag and drop image or search by keywords">
+            </div>
+            <div class="col-sm-1 ">
+              <span id="searchbtn">
+                <img id='icon' src="./static/icons/baseline_search_black_18dp.png"/>
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+          <!-- </div> -->
+
+      </div>
+      
+      <!-- Photo gallery -->
+      <div class ="lower-page">
+        <section class="main">
+
+        <div class="row photos"></div>
+          <!-- <div id="images-load">
+            <button type="button" id="load-imgs">Load more Images ...</button>
+          </div> -->
       </div>
     </div>
-    
-      <!-- Photo gallery -->
-    <div class ="lower-page">
-      <section class="main">
 
-
-      <div class="row photos"></div>
-      <!-- <div id="images-load">
-        <button type="button" id="load-imgs">Load more Images ...</button>
-      </div> -->
-      
-    </div>
   </section>
 
+  <footer>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.js"></script>
@@ -52,9 +74,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script> 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="./static/app.js"></script>
     <link rel="stylesheet" href="./static/main.css">
+  </footer>
+
   </body>
 </html>
 
