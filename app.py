@@ -1,7 +1,6 @@
 from flask import Flask, json, jsonify, request, render_template
 from flask.wrappers import Response
 from numpy.lib.type_check import imag
-import model
 from keras.models import load_model
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
@@ -87,7 +86,7 @@ def model_prediction():
         os.remove(file_path)
         return json.dumps({
             "code" : "E003",
-            "message" : "Image could not be classified, Try image of clothing items (pants, shirt,...)"
+            "message" : "Image could not be classified, Try image of clothing items (pants, shirt, ...)"
         })
 
     img_files = os.listdir(ROOT_PATH)
