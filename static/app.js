@@ -2,7 +2,8 @@
 // CONSTANTS
 const MIN_TAG_LENGTH = 2 
 const MAX_CHAR_LIMIT = 100
-
+var total_imgs = 0 
+const IMAGES_PER_PAGE = 12
 // When browswer loads, display images from server
 function loadImagesOnPage(){
 
@@ -11,26 +12,27 @@ function loadImagesOnPage(){
         url : "/images",
         success: function (data) {
             for (var i = 0; i<data.length; i++){
+                total_imgs = data.length;
                 if( data[i].match(/\.(jpe?g|png|gif|jfif)$/) ) { 
                     let div = $('<div></div>').addClass('col-sm-6 col-md-4 col-lg-3 item');
 
                     let photo = $(`<img 
-                                        id='img_${i}' 
+                                        id='img_${i+1}' 
                                         ondragstart='onDragStart(event)'   
                                         class='photo img-fluid w-100 shadow-1-strong rounded mb-4' 
                                         draggable='True' 
                                         on
                                         src='static/images/${data[i]}'>`);
 
-
                     $('.photos').append(div.append(photo))
                 } 
             }
+            setupPagination()
         }
     })
 
-}
 
+}
 
 // update images on page, with specific tags
 function getMatchingExif(tags) {
@@ -141,6 +143,99 @@ function uploadData(file){
     });
 }
 
+function setupPagination(){
+
+    var page = 1;
+
+    let btnGroup = $('.pagination')
+    
+    let numButtons = Math.ceil(total_imgs / IMAGES_PER_PAGE)
+    
+    // console.log("image count: " + total_imgs)
+    // console.log("buttons required: " + numButtons)
+    let btnPagePrev = $(`<li id="btnPagePrev" class="page-item"><a class="page-link">Previous</a></li>`)
+    btnPagePrev.on('click', function() {
+        if (page >  1) {
+            page -=1
+            goToPage(page)
+        }
+    })
+    btnGroup.append(btnPagePrev)
+
+    for (let i = 0; i < numButtons; i++) {
+        let btnPage = $(`<li id='btnPage${i+1}' class="page-item" value=${i+1}><a class="page-link">${i+1}</a></li>`);
+
+        btnPage.on('click', function(e) {
+            page = parseInt(e.target.text)
+            goToPage(page)
+        })
+        btnGroup.append(btnPage)
+    }
+    let btnPageNext = $(`<li id="btnPageNext" class="page-item"><a class="page-link">Next</a></li>`)
+    btnPageNext.on('click', function() {
+        if (page <  numButtons) {
+            page +=1
+            goToPage(page)
+        }
+    })
+    btnGroup.append(btnPageNext)
+
+    // go to start page
+    goToPage(page)
+}
+
+function goToPage(item) {
+    
+    console.log(item)
+
+    // remove previous active state
+    $(".pagination").find('a').removeClass("active-page");
+    let selected_li = $('li[value='+item+']').find('a')
+    $(selected_li).addClass('active-page')
+
+    showImages(item, total_imgs)
+}
+
+function getImagesRange(pageNum, totalImgs){
+    maxPages = Math.ceil(total_imgs/IMAGES_PER_PAGE)
+    let min_ =0
+    let max_ =0
+    if (pageNum > maxPages){ return}
+
+    if (pageNum == 1) {
+        min_ = 1
+        max_ = IMAGES_PER_PAGE
+    } else if (pageNum == maxPages){
+        if ((totalImgs / pageNum) % 1 == 0){ // complete set
+            min_ =((pageNum -1) * IMAGES_PER_PAGE)+1
+            max_ = pageNum * IMAGES_PER_PAGE
+        } else {
+            min_ = (pageNum -1) * IMAGES_PER_PAGE
+            max_ = min_ + (totalImgs % min_)
+        }
+    } else {
+        min_ = ((pageNum -1) * IMAGES_PER_PAGE)+1
+        max_ = pageNum * IMAGES_PER_PAGE
+    }
+
+    return [min_, max_]
+}
+function showImages(pageNum, total_imgs) {
+    // hide all images
+
+    $(".photo").parent().hide()
+
+    // show only the ones which belong to the page
+    let range = getImagesRange(pageNum, total_imgs)
+
+    // console.log(range)
+    for (let i = range[0]; i <= range[1]; i++) {
+        // console.log(i)
+        $(`img[id=img_${i}`).parent().show();     
+    }
+
+}
+
 // when image element is dragged on page
 function onDragStart(event){
     //  when image is dragged get its tag id
@@ -172,10 +267,10 @@ function imgUploadSearch(file){
 // when page loads
 $( document ).ready(function() {
     // file upload indicator
-    $("#loader").hide()
+    $("#loader").hide();
 
 
-    // add images to page
+    // // add images to page
     loadImagesOnPage(); 
 
     $('#logo').click(function() {

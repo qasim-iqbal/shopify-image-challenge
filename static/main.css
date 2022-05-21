@@ -53,7 +53,7 @@
 
 .wrapper #txtTagInput {
     width: 100%;
-    max-width: 30rem;
+    max-width: 35rem;
     padding: 15px 20px;
     border: none;
     border-radius: 5px;
@@ -67,16 +67,15 @@
   width: 3rem;
 }
 
-#searchbtn #fas{
-	position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 18px;
-    text-align: center;
+#searchbtn{
+  min-height: 3rem;
 }
 /* ^^ search button ^^ */
 
+
+.active-page {
+  background-color: #a0ffa9;
+}
 
 /* vv activity loading vv */
 

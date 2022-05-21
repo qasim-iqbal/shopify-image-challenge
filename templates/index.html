@@ -42,16 +42,32 @@
               <input type="text" id="txtTagInput" maxlength="100"
               placeholder="Drag and drop image or search by keywords">
             </div>
-            <div class="col-sm-1 ">
-              <span id="searchbtn">
+            <div class="col-sm-2 ">
+              <button type="button" class="btn btn-success" id="searchbtn" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                </svg>
+                Search
+              </button>
+              <!-- <span id="searchbtn">
                 <img id='icon' src="./static/icons/baseline_search_black_18dp.png"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
                 <i class="fas fa-search"></i>
-              </span>
+              </span> -->
             </div>
           <!-- </div> -->
 
       </div>
       
+      <div class="row justify-content-md-center mb-4">
+        <nav class="col-md-auto" aria-label="Page navigation example">
+          <ul class="pagination">
+          </ul>
+        </nav>
+      </div>
+
       <!-- Photo gallery -->
       <div class ="lower-page">
         <section class="main">
@@ -61,6 +77,14 @@
             <button type="button" id="load-imgs">Load more Images ...</button>
           </div> -->
       </div>
+
+      <div class="row justify-content-md-center mb-4 mt-4">
+        <nav class="col-md-auto" aria-label="Page navigation example">
+          <ul class="pagination">
+          </ul>
+        </nav>
+      </div>
+
     </div>
 
   </section>
@@ -77,6 +101,7 @@
 <!--     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="./static/app.js"></script>
+    <script src="/static/helpfuncs.js"></script>
     <link rel="stylesheet" href="./static/main.css">
   </footer>
 
