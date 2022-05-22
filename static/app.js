@@ -37,13 +37,22 @@ function loadImagesOnPage(){
 // update images on page, with specific tags
 function getMatchingExif(tags) {
     
+    //  hide pagination
+    $('.pagination').hide()
+
     // turn parameters to individual tags
-    if (typeof tags == "object" || typeof tags == "string"){
-        if (tags.length == 0 || tags.length <= MIN_TAG_LENGTH){ // empty array
+    if (typeof tags == "object"){
+        if (tags.length == 0){ // empty array
             alert("No match found!")
             return true // if empty then pass
         }else{
             tags = JSON.stringify(tags)
+        }
+    }
+    else if (typeof tags == "string"){
+        if (tags.length  <= MIN_TAG_LENGTH){
+            alert("No match found!")
+            return true // if empty then pass
         }
     }
     tags = tags.split(",")
@@ -78,13 +87,14 @@ function getMatchingExif(tags) {
                         for (let im_tag=0; im_tag< img_tags.length; im_tag++){
                             if (levenshteinDistance(tags[t], img_tags[im_tag]) <=2){
                                 $(img1).parent().show()
+
                             }
                         }
                     }
                 }
             });
-
         }
+
         $(".photo").filter(function () {
             item = $(this).css("display") == "none";
             $(item).remove()
@@ -132,7 +142,7 @@ function uploadData(file){
         processData: false,
         dataType: 'json',
         success: function(response){
-            console.log(response)
+            // console.log(response)
             if (response.code[0] == "E"){
                 alert("Error! "+ response.message)
             }else{
@@ -186,7 +196,7 @@ function setupPagination(){
 
 function goToPage(item) {
     
-    console.log(item)
+    // console.log(item)
 
     // remove previous active state
     $(".pagination").find('a').removeClass("active-page");
@@ -272,6 +282,8 @@ $( document ).ready(function() {
 
     // // add images to page
     loadImagesOnPage(); 
+
+    $('.pagination').show()
 
     $('#logo').click(function() {
         location.reload();

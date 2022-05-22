@@ -16,7 +16,7 @@ import uuid
 app = Flask(__name__)
 pretrained_model = None
 ROOT_PATH = "static/images"
-MAX_IMAGES_ON_SERVER = 50
+MAX_IMAGES_ON_SERVER = 25
 
 
 # API routes
