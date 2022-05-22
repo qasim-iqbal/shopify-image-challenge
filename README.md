@@ -6,7 +6,7 @@ The website is a single page application, with a search bar to find specific ima
 
 # Web Link
 
- The app is currently hosted on repl.it, one this url https://shopify-image-challenge.qasim-iqbal.repl.co/. However if this url doesn't work then continue to installation step below with docker.
+ The app is currently hosted on repl.it, on this url https://shopify-image-challenge.qasim-iqbal.repl.co/. However if this url doesn't work then continue to installation step below with docker.
 
 # Web app components
   - Backend: The backend component (API) was developed using Flask and serves html pages using render templates.
