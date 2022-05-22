@@ -1,9 +1,11 @@
 from flask import Flask, json, jsonify, request, render_template
 from flask.wrappers import Response
 from numpy.lib.type_check import imag
+from sklearn.feature_extraction import img_to_graph
+import tensorflow as tf
 from keras.models import load_model
-from keras.preprocessing.image import load_img
-from keras.preprocessing.image import img_to_array
+# from keras.preprocessing.image import load_img
+# from keras.preprocessing.image import img_to_array
 import os
 from PIL import Image
 import exif 
@@ -51,33 +53,30 @@ def model_prediction():
         })
 
     print("file uploaded")
+    img_height, img_width = 224, 224
     # define the expected input shape for the model
     # load and prepare the image
-    img_w, img_h = 64,64
-    
-    # load the image as grayscale
-    img = load_img(file_path, grayscale=True, target_size=(img_w,img_h))
-    # convert to array
-    img = img_to_array(img)
-    # reshape into a single sample with 1 channel, as we don't need very high quality images for training 
-    img = img.reshape(img_w, img_h, 1)
-    # prepare pixel data
-    img = img.astype('float32')
-    img = img / 255.0
+    img = tf.keras.utils.load_img(
+        file_path, target_size=(img_height, img_width)
+    )
 
-    # make prediction
-    pred = model.predict(img.reshape(1,img_w,img_h,1))
-
-    # define the probability threshold for detected objects
-    class_threshold = 0.8
+    img_array = tf.keras.utils.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0) # Create a batch
 
     # define the labels
-    labels = ['T-Shirt', 'Pants', 'Longsleeve', 'Dress','Shoes']
+    labels = ['Dress', 'Longsleeve', 'Pants', 'Shoes', 'T-Shirt']
+
+    predictions = model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
+
+
+    # define the probability threshold for detected objects
+    class_threshold = 0.6
 
     return_data = []
     # get the right class lable for prediction
-    if max(pred[0]) > class_threshold:
-        pred_label = labels[np.argmax(pred)]
+    if np.max(score) > class_threshold:
+        pred_label = labels[np.argmax(score)]
         # summarize what we found
         return_data = [pred_label]
 
@@ -120,7 +119,7 @@ def get_Images_Names():
 
 if __name__ == "__main__":
     # load yolov3 models
-    model = load_model('best_model.h5')
+    model = load_model('./models/best_model.h5')
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(host='0.0.0.0')
