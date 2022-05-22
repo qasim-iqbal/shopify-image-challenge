@@ -11,7 +11,7 @@ The website is a single page application, with a search bar to find specific ima
 # Web app components
   - Backend: The backend component (API) was developed using Flask and serves html pages using render templates.
   - Frontend: The templates of the page are designed from scratch using HTML and bootstrap-css to make a clean single page app that shows gallery of images. 
-  - ML Model: The backend model used for classifying images and returning labels was designed using TensorFlow (Keras), The image dataset used to train classifier was from is from github alexygrigorev -> https://github.com/alexeygrigorev/clothing-dataset. More info about the model is in the clothing_classifer.ipynb file in repo. Its test accuracy is over 91%.
+  - ML Model: The backend model used for classifying images and returning labels was designed using TensorFlow (Keras), The image dataset used to train classifier was from is from github alexygrigorev -> https://github.com/alexeygrigorev/clothing-dataset. More info about the model is in the clothing_classifer.ipynb file in repo. Its test accuracy is approximately ~90% on validation set.
   - Docker: To create a simple process to run the whole project, docker was used. More info about docker is shown in the installation section.
 
 # Installation:
