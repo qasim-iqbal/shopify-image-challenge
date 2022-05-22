@@ -1,11 +1,8 @@
 from flask import Flask, json, jsonify, request, render_template
-from flask.wrappers import Response
-from numpy.lib.type_check import imag
-from sklearn.feature_extraction import img_to_graph
+
 import tensorflow as tf
 from keras.models import load_model
-# from keras.preprocessing.image import load_img
-# from keras.preprocessing.image import img_to_array
+
 import os
 from PIL import Image
 import exif 
