@@ -32,4 +32,4 @@ The website is a single page application, with a search bar to find specific ima
   - Use NLP based word vectors on keywords and tags to find image matches even if they are not the same strings
   - Increase number of labels the model can identify. Also make it identify multiple items from image.
   - Make it an image gallery which connects to your local computer and allows you to search for images based many different criteria
-  - Add openCV support to serach for images based on different factors such as colors, gemoetry etc..
+  - Add openCV support to search for images based on different factors such as colors, gemoetry etc..
