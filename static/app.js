@@ -43,7 +43,7 @@ function getMatchingExif(tags) {
     // turn parameters to individual tags
     if (typeof tags == "object"){
         if (tags.length == 0){ // empty array
-            alert("No match found!")
+            alertMessage("No match found!")
             return true // if empty then pass
         }else{
             tags = JSON.stringify(tags)
@@ -51,7 +51,7 @@ function getMatchingExif(tags) {
     }
     else if (typeof tags == "string"){
         if (tags.length  <= MIN_TAG_LENGTH){
-            alert("No match found!")
+            alertMessage("No match found!")
             return true // if empty then pass
         }
     }
@@ -144,7 +144,7 @@ function uploadData(file){
         success: function(response){
             // console.log(response)
             if (response.code[0] == "E"){
-                alert("Error! "+ response.message)
+                alertMessage(response.message)
             }else{
                 getMatchingExif(response.message)
             }
@@ -274,6 +274,18 @@ function imgUploadSearch(file){
     });
 }
 
+
+function alertMessage(msg){
+    let alertBox = `    
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> ${msg}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>`;
+    $('#alerts').append(alertBox)
+}
+
 // when page loads
 $( document ).ready(function() {
     // file upload indicator
@@ -296,7 +308,7 @@ $( document ).ready(function() {
           return false;  
         }
         if ($('#txtTagInput').val().length > MAX_CHAR_LIMIT){
-            alert("Error! maxium character limit is '"+ MAX_CHAR_LIMIT +"'.")
+            alertMessage("Error! maxium character limit is '"+ MAX_CHAR_LIMIT +"'.")
         }
       });
 
@@ -320,7 +332,7 @@ $( document ).ready(function() {
             if (file.type.match(imageType)) {
                 uploadData(file)
             }else{
-                alert("Only image types such as [jpg| png| jfif] file types allowed")
+                alertMessage("Only image types such as [jpg| png| jfif] file types allowed")
             }
         }
     });
